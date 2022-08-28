@@ -1,6 +1,8 @@
 package client;
 
 import entity.Task;
+import request.Request;
+import request.TaskDTORequest;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,12 +18,23 @@ public class Client {
         Socket socket = new Socket(SERVER_HOST,PORT);
         ObjectInputStream socketInput = new ObjectInputStream(socket.getInputStream());
         ObjectOutputStream socketOutput = new ObjectOutputStream(socket.getOutputStream());
-        socketOutput.writeObject(new Task("payment"
+
+
+        Request request = new Request("post","create task",new TaskDTORequest("api"
                 , true
                 ,"John"
                 , LocalDate.now()
                 ,LocalDate.of(2022,9,22)));
+
+        socketOutput.writeObject(request);
         System.out.println(socketInput.readObject());
+        socketOutput.flush();
+        socketOutput.close();
+        socketInput.close();
+
+
+
+
 
     }
 }

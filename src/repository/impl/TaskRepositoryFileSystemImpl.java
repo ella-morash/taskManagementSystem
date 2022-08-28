@@ -18,7 +18,13 @@ public class TaskRepositoryFileSystemImpl implements TaskRepository {
     private  Set<String> taskNameSet;
 
     private ArrayList<Task> getListOfTasks() {
-        String path = Constants.BASE_FOLDER + File.separator + Constants.CHILD_FOLDER+ File.separator + Constants.TASK_LIST_PATH;
+
+        String path = Constants.BASE_FOLDER
+                + File.separator
+                + Constants.CHILD_FOLDER
+                + File.separator
+                + Constants.TASK_LIST_PATH;
+
         File file = new File(path);
         if(!file.exists()) {
             return new ArrayList<>();
@@ -39,7 +45,8 @@ public class TaskRepositoryFileSystemImpl implements TaskRepository {
 
     private Map<String,List<Task>> getPersonToTasksMap(){
         personToTasksMap = getListOfTasks().stream()
-                .collect(Collectors.groupingBy(Task::getAssignedPerson,Collectors.toList()));
+                                           .collect(Collectors.groupingBy(Task::getAssignedPerson
+                                                                           ,Collectors.toList()));
 
 
         return personToTasksMap;
@@ -55,7 +62,7 @@ public class TaskRepositoryFileSystemImpl implements TaskRepository {
 
         if(!taskNameSet.add(task.getName())) {
             throw new UnsupportedOperationException(String.format(
-                    "Task with name %s already exists in system",task.getName()
+                    "Task with name %s already exists in the system",task.getName()
             ));
 
         }
@@ -67,6 +74,7 @@ public class TaskRepositoryFileSystemImpl implements TaskRepository {
         try {
               pathListOfTasks = FileInitializer.initListOfTasksFile();
               pathOfTaskFile = FileInitializer.initTaskFile(task.getName());
+
         } catch (IOException e) {
             e.printStackTrace();
         }

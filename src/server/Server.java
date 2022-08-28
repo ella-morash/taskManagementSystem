@@ -3,6 +3,7 @@ package server;
 import controller.TaskController;
 import entity.Task;
 import repository.impl.TaskRepositoryFileSystemImpl;
+import request.Request;
 import service.impl.TaskServiceFileSystemImpl;
 
 import java.io.IOException;
@@ -16,19 +17,24 @@ public class Server {
     static final int PORT = 4543;
     public static void main(String[] args) throws IOException {
         ExecutorService pool = Executors.newFixedThreadPool(10);
-
         ServerSocket ss = new ServerSocket(PORT);
         TaskController taskController = new TaskController(new TaskServiceFileSystemImpl(new TaskRepositoryFileSystemImpl()));
 
-        while(true) {
-            var socket = ss.accept();
+        var socket = ss.accept();
 
-
-               try {
-                   ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+        try {
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                   taskController.createTask((Task) ois.readObject());
-               } catch (IOException | ClassNotFoundException e) {
+                   Request request = (Request) ois.readObject();taskController.createTask((new Task(request.getTaskDTORequest().getName()
+                           ,request.getTaskDTORequest().isCompleted(),
+                           request.getTaskDTORequest().getAssignedPerson()
+                           ,request.getTaskDTORequest().getCreatedDate()
+                           , request.getTaskDTORequest().getCompletionDate())));
+                   ois.close();
+                   oos.writeObject(taskController.findAll());
+                   oos.flush();
+                   oos.close();
+        } catch (IOException | ClassNotFoundException e) {
                    e.printStackTrace();
                }
 
@@ -36,5 +42,7 @@ public class Server {
 
         }
 
-    }
+
+
+
 }
