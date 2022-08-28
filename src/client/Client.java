@@ -1,6 +1,8 @@
 package client;
 
 import entity.Task;
+import request.CommandType;
+import request.MappingType;
 import request.Request;
 import request.TaskDTORequest;
 
@@ -15,20 +17,18 @@ public class Client {
     static final int PORT = 4543;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+
         Socket socket = new Socket(SERVER_HOST,PORT);
-        ObjectInputStream socketInput = new ObjectInputStream(socket.getInputStream());
         ObjectOutputStream socketOutput = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream socketInput = new ObjectInputStream(socket.getInputStream());
 
 
-        Request request = new Request("post","create task",new TaskDTORequest("api"
-                , true
-                ,"John"
-                , LocalDate.now()
-                ,LocalDate.of(2022,9,22)));
+        var request = new Request(MappingType.DELETE,CommandType.DELETE_TASK_BY_NAME,"api");
 
         socketOutput.writeObject(request);
-        System.out.println(socketInput.readObject());
+        var response = socketInput.readObject();
         socketOutput.flush();
+        System.out.println(response);
         socketOutput.close();
         socketInput.close();
 

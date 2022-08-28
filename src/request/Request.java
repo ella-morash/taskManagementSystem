@@ -4,36 +4,49 @@ import java.io.Serializable;
 
 public class Request implements Serializable {
     private final long serialVersionUID = 2L;
-    private String mapping;
-    private String command;
+    private MappingType mappingType;
+    private CommandType commandType;
+    private String person;
+    private String taskName;
     private TaskDTORequest taskDTORequest;
 
-    public Request(String mapping, String command) {
-        this.mapping = mapping;
-        this.command = command;
-    }
 
-    public Request(String mapping, String command, TaskDTORequest taskDTORequest) {
-        this.mapping = mapping;
-        this.command = command;
+    public Request(MappingType mappingType, CommandType commandType, TaskDTORequest taskDTORequest) {
+        this.mappingType = mappingType;
+        this.commandType = commandType;
         this.taskDTORequest = taskDTORequest;
+
+    }
+
+    public Request(MappingType mappingType, CommandType commandType,String taskName) {
+        this.mappingType = mappingType;
+        this.commandType = commandType;
+        this.taskName = taskName;
     }
 
 
-    public String getMapping() {
-        return mapping;
+
+    public Request(CommandType commandType, String person) {
+        this.commandType = commandType;
+        this.person = person;
     }
 
-    public void setMapping(String mapping) {
-        this.mapping = mapping;
+
+
+    public MappingType getMappingType() {
+        return mappingType;
     }
 
-    public String getCommand() {
-        return command;
+    public void setMappingType(MappingType mappingType) {
+        this.mappingType = mappingType;
     }
 
-    public void setCommand(String command) {
-        this.command = command;
+    public CommandType getCommandType() {
+        return commandType;
+    }
+
+    public void setCommandType(CommandType commandType) {
+        this.commandType = commandType;
     }
 
     public TaskDTORequest getTaskDTORequest() {
@@ -42,5 +55,21 @@ public class Request implements Serializable {
 
     public void setTaskDTORequest(TaskDTORequest taskDTORequest) {
         this.taskDTORequest = taskDTORequest;
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public void setPerson(String person) {
+        this.person = person;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 }

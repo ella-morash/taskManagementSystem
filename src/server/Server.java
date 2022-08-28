@@ -22,27 +22,60 @@ public class Server {
 
         var socket = ss.accept();
 
-        try {
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                   ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                   Request request = (Request) ois.readObject();taskController.createTask((new Task(request.getTaskDTORequest().getName()
-                           ,request.getTaskDTORequest().isCompleted(),
-                           request.getTaskDTORequest().getAssignedPerson()
-                           ,request.getTaskDTORequest().getCreatedDate()
-                           , request.getTaskDTORequest().getCompletionDate())));
-                   ois.close();
-                   oos.writeObject(taskController.findAll());
-                   oos.flush();
-                   oos.close();
-        } catch (IOException | ClassNotFoundException e) {
-                   e.printStackTrace();
-               }
+        pool.execute(() -> {
+            try {
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+
+                //oos.writeObject(taskController.findAll());
+                Request request = (Request) ois.readObject();
+
+                switch (request.getCommandType()){
+
+                    case FIND_ALL -> oos.writeObject(taskController.findAll());
+
+                    case FIND_ALL_BY_PERSON -> oos.writeObject(taskController.findAllTasksByAssignedPerson(request.getPerson()));
+
+                    case FIND_ALL_NOT_COMPLETED -> oos.writeObject(taskController.findAllNotCompletedTasks());
+
+                    case CREATE_TASK ->  taskController.createTask((new Task(request.getTaskDTORequest().getName()
+                            , request.getTaskDTORequest().isCompleted(),
+                            request.getTaskDTORequest().getAssignedPerson()
+                            , request.getTaskDTORequest().getCreatedDate()
+                            , request.getTaskDTORequest().getCompletionDate())));
+
+                    case DELETE_TASK_BY_NAME -> taskController.deleteTaskByName(request.getTaskName());
+
+                    default -> oos.writeObject("Unprocessable request");
+                }
+
+                oos.flush();
+                oos.close();
+                ois.close();
+
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        });
 
 
-
-        }
-
-
-
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
