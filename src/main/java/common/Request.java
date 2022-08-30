@@ -1,4 +1,4 @@
-package request;
+package common;
 
 import lombok.*;
 
@@ -15,6 +15,9 @@ public class Request implements Serializable {
     private CommandType commandType;
     private String person;
     private String taskName;
+
+    // NOT OK   -> delete | find
+    // OK       -> create | update
     private TaskDTORequest taskDTORequest;
 
 
