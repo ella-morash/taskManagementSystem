@@ -1,6 +1,6 @@
-import controller.TaskController;
-import repository.impl.TaskRepositoryFileSystemImpl;
-import service.impl.TaskServiceFileSystemImpl;
+import server.controller.TaskController;
+import server.repository.impl.TaskRepositoryFileSystemImpl;
+import server.service.impl.TaskServiceFileSystemImpl;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package request;
+package common;
 
 public enum MappingType {
     POST,

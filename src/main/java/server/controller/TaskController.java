@@ -1,7 +1,7 @@
-package controller;
+package server.controller;
 
-import entity.Task;
-import service.TaskService;
+import server.entity.Task;
+import server.service.TaskService;
 
 import java.util.List;
 

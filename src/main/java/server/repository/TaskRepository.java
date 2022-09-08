@@ -1,11 +1,11 @@
-package service;
+package server.repository;
 
-import entity.Task;
+import server.entity.Task;
 
 import java.util.List;
 
-public interface TaskService {
-    void createTask(Task task);
+public interface TaskRepository {
+    void persist(Task task);
     List<Task> findAll();
     List<Task> findAllNotCompletedTasks();
     List<Task> findAllTasksByAssignedPerson(String person);

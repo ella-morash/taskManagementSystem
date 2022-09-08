@@ -1,8 +1,8 @@
-package service.impl;
+package server.service.impl;
 
-import entity.Task;
-import repository.TaskRepository;
-import service.TaskService;
+import server.entity.Task;
+import server.repository.TaskRepository;
+import server.service.TaskService;
 
 import java.util.List;
 
